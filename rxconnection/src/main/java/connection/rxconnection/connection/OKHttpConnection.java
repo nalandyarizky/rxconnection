@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,8 +59,10 @@ public class OKHttpConnection<T, E> extends Header {
     private boolean logInfoRequestResponse;
     @Setter
     private CallBackForLog callBackForLog;
+    @Setter
+    private Proxy proxy;
     @Getter
-    private OkHttpClient okHttpClient = new OkHttpClient();
+    private OkHttpClient okHttpClient;
     @Getter
     private ModelLog modelLog;
     private UtilsQueueOKHttp utilsQueueOKHttp;
@@ -291,6 +294,10 @@ public class OKHttpConnection<T, E> extends Header {
             builder.connectTimeout(connectionTimeOut, TimeUnit.MINUTES);
             builder.readTimeout(readTimeOut, TimeUnit.MINUTES);
             builder.writeTimeout(writeTimeOut, TimeUnit.MINUTES);
+
+            if (proxy != null) {
+                builder.proxy(proxy);
+            }
 
             OkHttpClient okHttpClient = builder.build();
             return okHttpClient;

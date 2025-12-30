@@ -5,6 +5,7 @@ import android.content.Context;
 import java.io.File;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.net.Proxy;
 import java.util.Map;
 
 import connection.rxconnection.model.BaseResponse;
@@ -44,6 +45,7 @@ public class HttpRequest<REQUEST, RESPONSE> implements CallBackOKHttp, Observabl
     private CallBackForLog callBackForLog;
     @Getter
     private String message;
+    private Proxy proxy;
 
 
     public HttpRequest(REQUEST request, Context context, Class<RESPONSE> resultClass, String url,
@@ -164,6 +166,11 @@ public class HttpRequest<REQUEST, RESPONSE> implements CallBackOKHttp, Observabl
         return this;
     }
 
+    public HttpRequest<REQUEST, RESPONSE> setProxy(Proxy proxy) {
+        this.proxy = proxy;
+        return this;
+    }
+
 
     @Override
     public void call(Subscriber<? super BaseResponse<RESPONSE>> subscriber) {
@@ -178,6 +185,7 @@ public class HttpRequest<REQUEST, RESPONSE> implements CallBackOKHttp, Observabl
             teokHttpConnection.setMultipart(multipart);
             teokHttpConnection.setLogInfoRequestResponse(logInfoRequestResponse);
             teokHttpConnection.setCallBackForLog(callBackForLog);
+            teokHttpConnection.setProxy(proxy);
             teokHttpConnection.data(request, url, eClass, httpMethod, mediatypeRequest, mediaTypeResponse, context);
         }
     }
